@@ -28,8 +28,16 @@ class HumanPlayer(Player):
                 print('Invalid square. Try again.')
         return val
 
+class RandomComputerPlayer(Player):
+    def __init__(self, letter):
+        super().__init__(letter)
 
-def GeniusCompuerPlayer(Player):
+    def get_move(self, game):
+        square = random.choice(game.available_moves())
+        return square
+
+
+class GeniusComputerPlayer(Player):
     def __init__(self, letter):
         super().__init__(letter)
 
@@ -38,7 +46,7 @@ def GeniusCompuerPlayer(Player):
             square = random.choice(game.available_moves()) # randomly choose one
         else:
             # get the square based off the minimax algorithm
-            square = self.minimax(game, self.letter)
+            square = self.minimax(game, self.letter)['position']
         return square
 
     def minimax(self, state, player):
@@ -65,6 +73,21 @@ def GeniusCompuerPlayer(Player):
 
         for possible_move in state.available_moves():
             # step 1: make a move, try that spot
+            state.make_move(possible_move, player)
             # step 2: recurse using minimax to stimulate a game after making that move
+            sim_score = self.minimax(state, other_player)
             # step 3: undo the move
+            state.board[possible_move] = ' '
+            state.current_winner = None
+            sim_score['position'] = possible_move # otherwise this will get messed up from the recursion
             # step 4: update the dictionaries if necessary
+            if sim_score['score'] > best['score']:
+                best =sim_score # replace best
+            else:
+                if sim_score['score'] < best['score']:
+                    best = sim_score # replace best
+
+        return best
+
+
+
