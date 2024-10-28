@@ -55,12 +55,12 @@ class GeniusComputerPlayer(Player):
 
         # first, check if the previous move is a winner
         # this is the base case
-        if state.current_winne == other_player:
+        if state.current_winner == other_player:
             # return position AND score to keep track of the score
             # for minimax to work
             return { 'position': None,
-                     'score': 1 * (state.num_empty_square()) if other_player == max_player else -1 * (
-                         state.num_empty_square() + 1)
+                     'score': 1 * (state.num_empty_squares() +1) if other_player == max_player else -1 * (
+                         state.num_empty_squares() + 1)
             }
         elif not state.empty_squares(): # no empty squares
             return { 'position': None, 'score': 0}
